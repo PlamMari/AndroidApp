@@ -46,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.editEmail);
         button = findViewById(R.id.buttonSave);
         sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+
+        // Retrieve saved values from SharedPreferences
+        nameStr = sp.getString("name", "");
+        surnameStr = sp.getString("surname", "");
+        emailStr = sp.getString("email", "");
+
+        // Set the retrieved values to the EditText fields
+        name.setText(nameStr);
+        surname.setText(surnameStr);
+        email.setText(emailStr);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

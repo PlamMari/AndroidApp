@@ -1,5 +1,7 @@
 package com.example.androidapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -17,11 +19,20 @@ import com.example.androidapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    EditText name, surname, email;
+    Button button;
+    SharedPreferences sp;
+
+    String nameStr, surnameStr, emailStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +41,41 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        name = findViewById(R.id.editName);
+        surname = findViewById(R.id.editSurname);
+        email = findViewById(R.id.editEmail);
+        button = findViewById(R.id.buttonSave);
+        sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                nameStr = name.getText().toString();
+                surnameStr = surname.getText().toString();
+                emailStr = email.getText().toString();
+
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("name", nameStr);
+                editor.putString("surname", surnameStr);
+                editor.putString("email", emailStr);
+                editor.commit();
+                Toast.makeText(MainActivity.this, "Information Saved.", Toast.LENGTH_LONG).show();
             }
         });
+
+//        setSupportActionBar(binding.toolbar);
+//
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//
+//        binding.fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAnchorView(R.id.fab)
+//                        .setAction("Action", null).show();
+//            }
+//        });
     }
 
     @Override
